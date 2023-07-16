@@ -138,7 +138,7 @@ class Weaviate with UiLoggy {
   /// Adds a new schema class to the Weaviate server.
   ///
   /// The [schemaClass] parameter is the schema class to be added.
-  Future<void> addSchema(SchemaClass schemaClass) async =>
+  Future<SchemaClass> addSchema(SchemaClass schemaClass) async =>
       rest.addSchema(schemaClass);
 
   /// Retrieves the schema information from the Weaviate server.

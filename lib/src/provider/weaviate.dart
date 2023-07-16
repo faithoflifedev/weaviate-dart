@@ -78,7 +78,7 @@ abstract class WeaviateClient {
   ///
   /// The [schemaClass] parameter is the schema class to be added.
   @POST('/v1/schema')
-  Future<void> addSchema(
+  Future<SchemaClass> addSchema(
     @Body() SchemaClass schemaClass,
   );
 
