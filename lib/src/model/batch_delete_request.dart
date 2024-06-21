@@ -9,6 +9,10 @@ part 'batch_delete_request.g.dart';
 /// A class representing a batch delete request.
 ///
 /// Use this class to specify the criteria for deleting multiple items in a batch from a data source.
+/// The [match] parameter is required.
+/// The [output] parameter is required.
+/// The [dryRun] parameter is required.
+/// The [BatchDeleteRequest] class can be used to specify the criteria for deleting multiple items in a batch from a data source.
 @JsonSerializable()
 class BatchDeleteRequest {
   /// The match criteria for deleting items.

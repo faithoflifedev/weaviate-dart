@@ -6,6 +6,11 @@ import 'package:weaviate/weaviate.dart';
 
 /// A class representing the Weaviate client with logging capabilities.
 ///
+/// The [weaviateUrl] parameter is the URL of the Weaviate server.
+/// The [logOptions] parameter is an optional parameter representing the log options.
+/// The [printer] parameter is an optional parameter representing the log printer to use.
+///
+///
 /// Use this class to interact with the Weaviate server and perform various operations, while logging important events and errors.
 class Weaviate with UiLoggy {
   /// The accept header value for JSON.
@@ -89,7 +94,16 @@ class Weaviate with UiLoggy {
     rest = WeaviateClient(dio);
   }
 
-  /// Retrieves the GraphQL client for interacting with the Weaviate server using GraphQL.
+  /// The [getGraphQLClient] method can be used to retrieve the GraphQL client for interacting with the Weaviate server using GraphQL.
+  /// @example
+  /// ```dart
+  ///
+  /// final weaviate = Weaviate(
+  ///  weaviateUrl: 'http://localhost:8080',
+  /// );
+  ///
+  /// final client = weaviate.getGraphQLClient();
+  /// ```
   GraphQLClient getGraphQLClient() {
     final weaviateApiKey = Platform.environment['WEAVIATE_API_KEY'];
 

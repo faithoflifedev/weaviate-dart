@@ -1,3 +1,4 @@
-commit: published
+commit: dependency bump, initial release
 changes: |
-  * published
+  * initial release
+  * bump dependencies
