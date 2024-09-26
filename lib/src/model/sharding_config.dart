@@ -15,8 +15,6 @@ class ShardingConfig {
   final int? virtualPerPhysical;
 
   /// Creates a new [ShardingConfig] instance.
-  ///
-  /// The [where] parameter is required and represents the ShardingConfiging criteria as a map.
   ShardingConfig({
     this.desiredCount,
     this.virtualPerPhysical = 128,

@@ -16,7 +16,7 @@ class Link {
 
   /// Creates a new [Link] instance.
   ///
-  /// The [links] to other endpoints to help discover the REST API
+  /// The link to other endpoints to help discover the REST API
   Link({
     this.documentationHref,
     required this.href,

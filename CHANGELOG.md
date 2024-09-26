@@ -1,3 +1,7 @@
+## 1.26.4+2
+
+* api doc tweaks
+
 ## 1.26.4+1
 
 * web platform support

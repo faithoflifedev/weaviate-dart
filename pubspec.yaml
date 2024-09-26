@@ -1,6 +1,6 @@
 name: weaviate
 description: The Weaviate Dart project provides a Dart wrapper for the Weaviate REST API, enabling developers to interact with a Weaviate vector database.
-version: 1.26.4+1
+version: 1.26.4+2
 homepage: https://github.com/faithoflifedev/weaviate-dart
 repository: https://github.com/faithoflifedev/weaviate-dart.git
 

@@ -29,7 +29,7 @@ Add `weaviate` as a dependency in your `pubspec.yaml` file:
 ```yaml
 dependencies:
   ...
-  weaviate: ^1.26.4+1
+  weaviate: ^1.26.4+2
 ```
 
 Then run `flutter pub get` to fetch the package.
