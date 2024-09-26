@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:graphql/client.dart';
 import 'package:loggy/loggy.dart';
-import 'package:universal_io/io.dart';
 import 'package:weaviate/weaviate.dart' hide Link;
 import 'package:weaviate/weaviate.dart' as w show Link;
+
+final missingEnvironmentVariable =
+    'You need to set your Weaviate API key in the WEAVIATE_API_KEY environment variable.';
 
 /// A class representing the Weaviate client with logging capabilities.
 ///
@@ -43,20 +45,23 @@ class Weaviate with UiLoggy {
     LoggyPrinter printer = const PrettyPrinter(showColors: false),
     this.headers,
   }) {
-    final weaviateApiKey = Platform.environment['WEAVIATE_API_KEY'];
+    final weaviateApiKey = getApiKey('WEAVIATE_API_KEY');
 
-    if (weaviateApiKey == null) {
+    if (weaviateApiKey == '') {
       loggy.debug(
-        'You need to set your Weaviate API key in the WEAVIATE_API_KEY environment variable.',
+        missingEnvironmentVariable,
       );
-      exit(1);
+
+      throw Exception(
+        missingEnvironmentVariable,
+      );
     }
 
-    final openaiApiKey = Platform.environment['OPENAI_API_KEY'] ?? '';
+    final openaiApiKey = getApiKey('OPENAI_API_KEY');
 
-    final huggingFaceApiKey = Platform.environment['HUGGINGFACE_API_KEY'] ?? '';
+    final huggingFaceApiKey = getApiKey('HUGGINGFACE_API_KEY');
 
-    final cohereApiKey = Platform.environment['COHERE_API_KEY'] ?? '';
+    final cohereApiKey = getApiKey('COHERE_API_KEY');
 
     Loggy.initLoggy(
       logPrinter: printer,
@@ -108,30 +113,32 @@ class Weaviate with UiLoggy {
   /// final client = weaviate.getGraphQLClient();
   /// ```
   GraphQLClient getGraphQLClient() {
-    final weaviateApiKey = Platform.environment['WEAVIATE_API_KEY'];
+    final weaviateApiKey = getApiKey('WEAVIATE_API_KEY');
 
-    if (weaviateApiKey == null) {
+    if (weaviateApiKey == '') {
       loggy.debug(
-        'You need to set your Weaviate API key in the WEAVIATE_API_KEY environment variable.',
+        missingEnvironmentVariable,
       );
-      exit(1);
+
+      throw Exception(
+        missingEnvironmentVariable,
+      );
     }
 
-    final huggingFaceApiKey = Platform.environment['HUGGINGFACE_API_KEY'];
+    final openaiApiKey = getApiKey('OPENAI_API_KEY');
 
-    // if (huggingFaceApiKey == null) {
-    //   loggy.debug(
-    //     'You need to set your HuggingFace API key in the HUGGINGFACE_API_KEY environment variable.',
-    //   );
-    //   exit(1);
-    // }
+    final huggingFaceApiKey = getApiKey('HUGGINGFACE_API_KEY');
+
+    final cohereApiKey = getApiKey('COHERE_API_KEY');
 
     final Link link = HttpLink(
       '$weaviateUrl/v1/graphql',
       defaultHeaders: {
         'Content-Type': accept,
         'Authorization': 'Bearer $weaviateApiKey',
-        'X-HuggingFace-Api-Key': huggingFaceApiKey ?? '',
+        'X-OpenAI-Api-Key': openaiApiKey,
+        'X-HuggingFace-Api-Key': huggingFaceApiKey,
+        'X-Cohere-Api-Key': cohereApiKey,
       },
     );
 

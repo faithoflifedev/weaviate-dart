@@ -32,5 +32,6 @@ export 'src/model/weaviate_object.dart';
 export 'src/provider/weaviate.dart';
 
 // Export the utility classes
+export 'src/util/api_keys.dart';
 export 'src/util/extra.dart';
 export 'src/util/logging_interceptors.dart';

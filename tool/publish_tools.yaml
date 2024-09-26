@@ -1,5 +1,3 @@
-commit: bump dependencies, better documentation, wider api support
+commit: web platform support
 changes: |
-  * bump dependencies
-  * better documentation
-  * wider api support
+  * web platform support

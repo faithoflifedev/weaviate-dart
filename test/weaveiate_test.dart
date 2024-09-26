@@ -1,7 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:test/test.dart';
-import 'package:universal_io/io.dart';
 import 'package:weaviate/weaviate.dart';
 
 void main() {

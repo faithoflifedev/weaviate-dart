@@ -36,7 +36,7 @@ Then run `flutter pub get` to fetch the package.
 
 ## API Keys
 
-Additional information on this topic is available in the Weaviate documentation for [Third party API keys]([COHERE_API_KEY](https://weaviate.io/developers/weaviate/connections/connect-cloud#third-party-api-keys))
+Additional information on this topic is available in the Weaviate documentation for [Third party API keys](https://weaviate.io/developers/weaviate/connections/connect-cloud#third-party-api-keys)
 
 If you use API-based models for vectorization or RAG, you must provide an API key for the service. To add third party API keys there are two options available, these are environment variables and custom headers.
 

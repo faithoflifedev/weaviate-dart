@@ -1,3 +1,7 @@
+## 1.26.4+1
+
+* web platform support
+
 ## 1.26.4
 
 * bump dependencies
