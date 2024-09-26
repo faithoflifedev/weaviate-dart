@@ -1,6 +1,7 @@
 import 'dart:convert' show json;
 
 import 'package:json_annotation/json_annotation.dart';
+import 'package:weaviate/weaviate.dart';
 
 part 'reference.g.dart';
 
@@ -26,13 +27,12 @@ class Reference {
   /// Creates a [Reference] instance from a JSON map.
   ///
   /// The [json] parameter is a JSON map representing the reference.
-  factory Reference.fromJson(Map<String, dynamic> json) =>
-      _$ReferenceFromJson(json);
+  factory Reference.fromJson(JsonObject json) => _$ReferenceFromJson(json);
 
   /// Converts the [Reference] instance to a JSON map.
   ///
   /// Returns a JSON map representing the reference.
-  Map<String, dynamic> toJson() => _$ReferenceToJson(this);
+  JsonObject toJson() => _$ReferenceToJson(this);
 
   @override
   String toString() => json.encode(toJson());

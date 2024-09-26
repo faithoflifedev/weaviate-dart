@@ -1,6 +1,7 @@
 import 'dart:convert' show json;
 
 import 'package:json_annotation/json_annotation.dart';
+import 'package:weaviate/weaviate.dart';
 
 part 'text2vec_contextionary.g.dart';
 
@@ -12,10 +13,10 @@ class Text2vecContextionary {
     required this.vectorizePropertyName,
   });
 
-  factory Text2vecContextionary.fromJson(Map<String, dynamic> json) =>
+  factory Text2vecContextionary.fromJson(JsonObject json) =>
       _$Text2vecContextionaryFromJson(json);
 
-  Map<String, dynamic> toJson() => _$Text2vecContextionaryToJson(this);
+  JsonObject toJson() => _$Text2vecContextionaryToJson(this);
 
   @override
   String toString() => json.encode(toJson());

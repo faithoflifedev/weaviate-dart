@@ -8,8 +8,13 @@ A Dart wrapper for the Weaviate REST API, allowing you to easily integrate Weavi
 ## Table of Contents
 
 - [Installation](#installation)
+- [API Keys](#api-keys)
+  - [Environment Variables](#environment-variables)
+  - [Custom Headers](#custom-headers)
 - [Usage](#usage)
 - [Examples](#examples)
+  - [Creating an object](#creating-an-object)
+  - [Querying objects](#querying-objects)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -29,6 +34,61 @@ dependencies:
 
 Then run `flutter pub get` to fetch the package.
 
+## API Keys
+
+Additional information on this topic is available in the Weaviate documentation for [Third party API keys]([COHERE_API_KEY](https://weaviate.io/developers/weaviate/connections/connect-cloud#third-party-api-keys))
+
+If you use API-based models for vectorization or RAG, you must provide an API key for the service. To add third party API keys there are two options available, these are environment variables and custom headers.
+
+### Environment Variables
+
+Currently this package supports the following API keys set as environment variables:
+- WEAVIATE_API_KEY
+- OPENAI_API_KEY
+- HUGGINGFACE_API_KEY
+- COHERE_API_KEY
+
+Any other API key must be set as outlined in the **Custom Headers** section below.
+
+**bash/zsh**
+```sh
+export WEAVIATE_API_KEY="YOUR_WEAVIATE_KEY"
+export OPENAI_API_KEY="YOUR_OPENAPI_KEY"
+export HUGGINGFACE_API_KEY="YOUR_HUGGINGFACE_KEY"
+export COHERE_API_KEY="YOUR_COHERE_KEY"
+```
+
+**windows powershell**
+```sh
+$Env:WEAVIATE_API_KEY="YOUR_WEAVIATE_KEY"
+$Env:OPENAI_API_KEY="YOUR_OPENAPI_KEY"
+$Env:HUGGINGFACE_API_KEY="YOUR_HUGGINGFACE_KEY"
+$Env:COHERE_API_KEY="YOUR_COHERE_KEY"
+```
+
+**windows command prompt**
+```sh
+set WEAVIATE_API_KEY="YOUR_WEAVIATE_KEY"
+set OPENAI_API_KEY="YOUR_OPENAPI_KEY"
+set HUGGINGFACE_API_KEY="YOUR_HUGGINGFACE_KEY"
+set COHERE_API_KEY="YOUR_COHERE_KEY"
+```
+
+### Custom Headers
+
+As an alternative to environment variables, API keys can also be added directly as custom headers as shown below.  This method is useful in the case that a given API key is not yet supported by this package.  Using environment variables is preferred since these are more secure and less likely to get accidentally committed to GitHub.
+
+```dart
+final weaviate = Weaviate(
+    weaviateUrl: clusterUrl ?? 'http://localhost:8080',
+    headers: {
+      'Authorization': 'Bearer YOUR_WEAVIATE_KEY'
+      'X-OpenAI-Api-Key': 'YOUR_OPENAPI_KEY',
+      'X-HuggingFace-Api-Key': 'YOUR_HUGGINGFACE_API_KEY',
+      'X-Cohere-Api-Key': 'YOUR_COHERE_API_KEY',
+    },
+```
+
 ## Usage
 
 Import the package in your Dart file:
@@ -42,6 +102,7 @@ Create a new instance of the Weaviate client:
 ```dart
   final weaviate = Weaviate(
       weaviateUrl: '[your cloud instance or other host]',
+      // add headers if api keys have not been set in environment vars
       ));
 ```
 
@@ -49,7 +110,7 @@ Now you can use the client to interact with the Weaviate API.
 
 ## Examples
 
-Here are a few examples demonstrating the usage of the Weaviate Dart wrapper:
+The following example demonstrates the usage of the Weaviate Dart wrapper:
 
 ### Creating an object
 
@@ -57,7 +118,9 @@ Here are a few examples demonstrating the usage of the Weaviate Dart wrapper:
 import 'package:weaviate/weaviate.dart';
 
 void main() async {
-  final weaviate = WeaviateClient('[your cloud instance or other host]');
+  final weaviate = WeaviateClient(
+    '[your cloud instance or other host]',
+   );
 
   // delete schema if it exists
   await weaviate.deleteSchema('Question');
@@ -75,7 +138,7 @@ void main() async {
   await weaviate.addSchema(schema);
     
   try {
-    // use a json file as input documents
+    // use a json file as input document
     final inputData = json.decode(File('jeopardy_tiny.json').readAsStringSync())
       as List<dynamic>;
 

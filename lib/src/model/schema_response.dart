@@ -1,8 +1,7 @@
 import 'dart:convert' show json;
 
 import 'package:json_annotation/json_annotation.dart';
-
-import 'schema_class.dart';
+import 'package:weaviate/weaviate.dart';
 
 part 'schema_response.g.dart';
 
@@ -24,13 +23,13 @@ class SchemaResponse {
   /// Creates a [SchemaResponse] instance from a JSON map.
   ///
   /// The [json] parameter is a JSON map representing the schema response.
-  factory SchemaResponse.fromJson(Map<String, dynamic> json) =>
+  factory SchemaResponse.fromJson(JsonObject json) =>
       _$SchemaResponseFromJson(json);
 
   /// Converts the [SchemaResponse] instance to a JSON map.
   ///
   /// Returns a JSON map representing the schema response.
-  Map<String, dynamic> toJson() => _$SchemaResponseToJson(this);
+  JsonObject toJson() => _$SchemaResponseToJson(this);
 
   @override
   String toString() => json.encode(toJson());

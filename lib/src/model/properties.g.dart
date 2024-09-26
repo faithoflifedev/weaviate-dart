@@ -9,12 +9,19 @@ part of 'properties.dart';
 Properties _$PropertiesFromJson(Map<String, dynamic> json) => Properties(
       dataType:
           (json['dataType'] as List<dynamic>).map((e) => e as String).toList(),
-      description: json['description'] as String,
+      description: json['description'] as String?,
       moduleConfig: json['moduleConfig'] as Map<String, dynamic>?,
       name: json['name'] as String,
       indexFilterable: json['indexFilterable'] as bool?,
       indexSearchable: json['indexSearchable'] as bool?,
-      tokenization: json['tokenization'] as String?,
+      indexRangeFilters: json['indexRangeFilters'] as bool?,
+      tokenization:
+          $enumDecodeNullable(_$TokenizationEnumMap, json['tokenization']) ??
+              Tokenization.word,
+      nestedProperties: json['nestedProperties'] == null
+          ? null
+          : Properties.fromJson(
+              json['nestedProperties'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$PropertiesToJson(Properties instance) =>
@@ -25,5 +32,17 @@ Map<String, dynamic> _$PropertiesToJson(Properties instance) =>
       'name': instance.name,
       'indexFilterable': instance.indexFilterable,
       'indexSearchable': instance.indexSearchable,
-      'tokenization': instance.tokenization,
+      'indexRangeFilters': instance.indexRangeFilters,
+      'tokenization': _$TokenizationEnumMap[instance.tokenization],
+      'nestedProperties': instance.nestedProperties,
     };
+
+const _$TokenizationEnumMap = {
+  Tokenization.word: 'word',
+  Tokenization.lowercase: 'lowercase',
+  Tokenization.whitespace: 'whitespace',
+  Tokenization.field: 'field',
+  Tokenization.trigram: 'trigram',
+  Tokenization.gse: 'gse',
+  Tokenization.kagome_kr: 'kagome_kr',
+};

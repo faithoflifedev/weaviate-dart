@@ -1,8 +1,7 @@
 import 'dart:convert' show json;
 
 import 'package:json_annotation/json_annotation.dart';
-
-import 'match.dart';
+import 'package:weaviate/weaviate.dart';
 
 part 'batch_delete_response.g.dart';
 
@@ -23,7 +22,7 @@ class BatchDeleteResponse {
   /// The results of the batch delete operation.
   ///
   /// The results are represented as a map where the keys are strings and the values are dynamic.
-  final Map<String, dynamic> results;
+  final JsonObject results;
 
   /// Creates a new [BatchDeleteResponse] instance.
   ///
@@ -36,11 +35,11 @@ class BatchDeleteResponse {
   });
 
   /// Creates a [BatchDeleteResponse] instance from a JSON map.
-  factory BatchDeleteResponse.fromJson(Map<String, dynamic> json) =>
+  factory BatchDeleteResponse.fromJson(JsonObject json) =>
       _$BatchDeleteResponseFromJson(json);
 
   /// Converts the [BatchDeleteResponse] instance to a JSON map.
-  Map<String, dynamic> toJson() => _$BatchDeleteResponseToJson(this);
+  JsonObject toJson() => _$BatchDeleteResponseToJson(this);
 
   @override
   String toString() => json.encode(toJson());

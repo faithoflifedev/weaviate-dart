@@ -1,8 +1,7 @@
 import 'dart:convert' show json;
 
 import 'package:json_annotation/json_annotation.dart';
-
-import 'match.dart';
+import 'package:weaviate/weaviate.dart';
 
 part 'batch_delete_request.g.dart';
 
@@ -34,11 +33,11 @@ class BatchDeleteRequest {
   });
 
   /// Creates a [BatchDeleteRequest] instance from a JSON map.
-  factory BatchDeleteRequest.fromJson(Map<String, dynamic> json) =>
+  factory BatchDeleteRequest.fromJson(JsonObject json) =>
       _$BatchDeleteRequestFromJson(json);
 
   /// Converts the [BatchDeleteRequest] instance to a JSON map.
-  Map<String, dynamic> toJson() => _$BatchDeleteRequestToJson(this);
+  JsonObject toJson() => _$BatchDeleteRequestToJson(this);
 
   @override
   String toString() => json.encode(toJson());

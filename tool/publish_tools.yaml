@@ -1,4 +1,5 @@
-commit: dependency bump, initial release
+commit: bump dependencies, better documentation, wider api support
 changes: |
-  * initial release
   * bump dependencies
+  * better documentation
+  * wider api support

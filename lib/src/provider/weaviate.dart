@@ -16,6 +16,10 @@ abstract class WeaviateClient {
   /// The [baseUrl] parameter is an optional parameter representing the base URL of the Weaviate server.
   factory WeaviateClient(Dio dio, {String baseUrl}) = _WeaviateClient;
 
+  /// Get links to other endpoints to help discover the REST API
+  @GET('/v1/')
+  Future<EndPoints> list();
+
   /// Performs a batch operation to create multiple Weaviate objects.
   ///
   /// The [batchObjectRequest] parameter is the batch request object containing the Weaviate objects to be created.
@@ -70,16 +74,26 @@ abstract class WeaviateClient {
   @GET('/v1/meta')
   Future<MetaResponse> getMeta();
 
-  /// Retrieves the schema information from the Weaviate server.
+  /// Fetch an array of all collection definitions from the schema.
   @GET('/v1/schema')
-  Future<SchemaResponse> getSchema();
+  Future<SchemaResponse> getSchemas(
+    @Query('consistency') bool? consistency,
+  );
 
-  /// Adds a new schema class to the Weaviate server.
+  /// Create a new data object collection.
   ///
-  /// The [schemaClass] parameter is the schema class to be added.
+  /// If [AutoSchema](https://weaviate.io/developers/weaviate/config-refs/schema#auto-schema) is enabled, Weaviate will attempt to infer the schema from the data at import time. However, manual schema definition is recommended for production environments.
+  ///
+  /// For further discussions of parameters, please see the [schema reference](https://weaviate.io/developers/weaviate/config-refs/schema) page.
   @POST('/v1/schema')
   Future<SchemaClass> addSchema(
     @Body() SchemaClass schemaClass,
+  );
+
+  /// Get a single collection schema.
+  @GET('/v1/schema/{class_name}')
+  Future<SchemaClass> getSchema(
+    @Path('class_name') String className,
   );
 
   /// Deletes a schema class from the Weaviate server.
@@ -89,6 +103,28 @@ abstract class WeaviateClient {
   Future<void> deleteSchema(
     @Path('class_name') String className,
   );
+
+  /// Alter an existing collection definition.
+  ///
+  /// Note that not all settings are mutable [(see this list)](https://weaviate.io/developers/weaviate/config-refs/schema#mutability). To update any other (i.e. immutable) setting, you need to delete the collection, re-create it with the correct setting and then re-import the data.
+  ///
+  /// This endpoint cannot be used to modify properties. Instead use POST /v1/schema/{className}/properties. A typical use case for this endpoint is to update a index configuration, such as `vectorIndexConfig/dynamicEfFactor`.
+  ///
+  /// You should attach a body to this PUT request with the entire new configuration of the collection.
+  @PUT('/v1/schema/{class_name}')
+  Future<SchemaClass> updateSchema({
+    @Path('class_name') required String className,
+    @Body() required SchemaClass schemaClass,
+  });
+
+  /// Add a property to an existing collection.
+  ///
+  /// If possible, we encourage you to create all required properties at collection creation time. Adding a property after collection creation can lead to [some indexing limitations](https://weaviate.io/developers/weaviate/config-refs/schema).
+  @POST('/v1/schema/{class_name}/properties')
+  Future<SchemaClass> addPropertyToSchema({
+    @Path('class_name') required String className,
+    @Body() required Property property,
+  });
 
   /// Retrieves the OpenID configuration information from the Weaviate server.
   @GET('/v1/.well-known/openid-configuration')

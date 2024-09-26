@@ -1,6 +1,7 @@
 import 'dart:convert' show json;
 
 import 'package:json_annotation/json_annotation.dart';
+import 'package:weaviate/weaviate.dart';
 
 part 'text2vec_huggingface.g.dart';
 
@@ -8,17 +9,19 @@ part 'text2vec_huggingface.g.dart';
 class Text2vecHuggingFace {
   final String model;
 
-  final Map<String, dynamic>? options;
+  final JsonObject? options;
 
   Text2vecHuggingFace({
     required this.model,
     this.options,
   });
 
-  factory Text2vecHuggingFace.fromJson(Map<String, dynamic> json) =>
+  factory Text2vecHuggingFace.fromJson(JsonObject json) =>
       _$Text2vecHuggingFaceFromJson(json);
 
-  Map<String, dynamic> toJson() => _$Text2vecHuggingFaceToJson(this);
+  JsonObject toJson() => {
+        'text2vec-huggingface': _$Text2vecHuggingFaceToJson(this),
+      };
 
   @override
   String toString() => json.encode(toJson());

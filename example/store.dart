@@ -1,21 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:graphql/client.dart';
 import 'package:loggy/loggy.dart';
 import 'package:weaviate/weaviate.dart';
 
 void main(List<String> arguments) async {
   final clusterUrl = Platform.environment['CLUSTER_URL'];
 
+  // The sample cluster on weaviate.cloud will expire in 14 days
   final weaviate = Weaviate(
       weaviateUrl: clusterUrl ?? 'http://localhost:8080',
-      // headers: {
-      //   'X-OpenAI-Api-Key': 'YOUR_OPENAPI_KEY',
-      //   'X-HuggingFace-Api-Key': 'YOUR_HUGGINGFACE_API_KEY',
-      // },
       logOptions: const LogOptions(
-        LogLevel.error,
+        LogLevel.all,
         stackTraceLevel: LogLevel.off,
       ));
 
@@ -25,18 +21,38 @@ void main(List<String> arguments) async {
   final schema = SchemaClass(
     className: 'Question',
     vectorizer: 'text2vec-huggingface',
-    moduleConfig: Text2vecHuggingFace(
-      model: 'sentence-transformers/all-MiniLM-L6-v2',
-    ).toJson(),
+
+    moduleConfig: {
+      'text2vec-huggingface': {
+        'model': 'sentence-transformers/all-MiniLM-L6-v2',
+      }
+    },
+
+    properties: [
+      Properties(
+        name: 'category',
+        dataType: ['string'],
+      ),
+      Properties(
+        name: 'question',
+        dataType: ['string'],
+      ),
+      Properties(
+        name: 'answer',
+        dataType: ['string'],
+      ),
+    ],
+
+    // moduleConfig: Text2vecHuggingFace(
+    //   model: 'sentence-transformers/all-MiniLM-L6-v2',
+    // ).toJson(),
   );
 
   await weaviate.addSchema(schema);
 
-  // final schemaResponse = await weaviate.getSchema();
+  // final schemaClass = await weaviate.getSchema('Question');
 
-  // for (final schemaClass in schemaResponse.classes) {
-  //   print(schemaClass);
-  // }
+  // print(schemaClass);
 
   final inputData = json.decode(File('jeopardy_tiny.json').readAsStringSync())
       as List<dynamic>;
@@ -54,30 +70,4 @@ void main(List<String> arguments) async {
 
   // final weaviateObjects =
   await weaviate.batchObjects(BatchObjectRequest(objects: objects));
-
-  final QueryOptions options = QueryOptions(document: gql(r'''{
-  Get{
-    Question (
-      limit: 2
-      where: {
-        path: ["category"],
-        operator: Equal,
-        valueText: "ANIMALS"
-      }
-      nearText: {
-        concepts: ["biology"],
-      }
-    ){
-      question
-      answer
-      category
-    }
-  }
-}'''));
-
-  print('querying...');
-
-  final result = await weaviate.getGraphQLClient().query(options);
-
-  print(result.data?['Get']['Question']);
 }

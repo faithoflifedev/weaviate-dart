@@ -1,6 +1,7 @@
 import 'dart:convert' show json;
 
 import 'package:json_annotation/json_annotation.dart';
+import 'package:weaviate/weaviate.dart';
 
 part 'meta_response.g.dart';
 
@@ -15,7 +16,7 @@ class MetaResponse {
   /// The modules installed on the Weaviate server.
   ///
   /// The modules are represented as a map where the keys are strings and the values are dynamic.
-  final Map<String, dynamic> modules;
+  final JsonObject modules;
 
   /// The version of the Weaviate server.
   final String version;
@@ -32,13 +33,13 @@ class MetaResponse {
   /// Creates a [MetaResponse] instance from a JSON map.
   ///
   /// The [json] parameter is a JSON map representing the metadata response.
-  factory MetaResponse.fromJson(Map<String, dynamic> json) =>
+  factory MetaResponse.fromJson(JsonObject json) =>
       _$MetaResponseFromJson(json);
 
   /// Converts the [MetaResponse] instance to a JSON map.
   ///
   /// Returns a JSON map representing the metadata response.
-  Map<String, dynamic> toJson() => _$MetaResponseToJson(this);
+  JsonObject toJson() => _$MetaResponseToJson(this);
 
   @override
   String toString() => json.encode(toJson());

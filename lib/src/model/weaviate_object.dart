@@ -1,6 +1,7 @@
 import 'dart:convert' show json;
 
 import 'package:json_annotation/json_annotation.dart';
+import 'package:weaviate/weaviate.dart';
 
 part 'weaviate_object.g.dart';
 
@@ -13,51 +14,59 @@ class WeaviateObject {
   @JsonKey(name: 'class')
   final String className;
 
+  /// Allow custom overrides of vector weights as math expressions in word-based vectorization models. E.g. "pancake": "7" will set the weight for the word pancake to 7 in the vectorization, whereas "w * 3" would triple the originally calculated word.
+  final JsonObject? vectorWeights;
+
   /// The properties of the Weaviate object.
-  final Map<String, dynamic> properties;
+  final JsonObject? properties;
 
   /// The ID of the Weaviate object.
   final String? id;
 
-  /// The Unix timestamp representing the creation time of the Weaviate object.
+  /// (Response only) Timestamp of creation of this object in milliseconds since epoch UTC.
   final int? creationTimeUnix;
 
-  /// The Unix timestamp representing the last update time of the Weaviate object.
+  /// (Response only) Timestamp of the last object update in milliseconds since epoch UTC.
   final int? lastUpdateTimeUnix;
 
   /// The vector associated with the Weaviate object.
   final List<double>? vector;
 
-  /// The classification information associated with the Weaviate object.
-  final List<Map<String, dynamic>>? classification;
+  /// This field returns vectors associated with the Object.
+  final JsonObject? vectors;
 
-  /// The feature projection associated with the Weaviate object.
-  final List<double>? featureProjection;
+  /// Name of the tenant.
+  final String? tenant;
+
+  /// (Response only) Additional meta information about a single object.
+  final JsonObject? additional;
 
   /// Creates a new [WeaviateObject] instance.
   ///
   /// The [className] and [properties] parameters are required.
   WeaviateObject({
     required this.className,
-    required this.properties,
+    this.vectorWeights,
+    this.properties,
     this.id,
     this.creationTimeUnix,
     this.lastUpdateTimeUnix,
     this.vector,
-    this.classification,
-    this.featureProjection,
+    this.vectors,
+    this.tenant,
+    this.additional,
   });
 
   /// Creates a [WeaviateObject] instance from a JSON map.
   ///
   /// The [json] parameter is a JSON map representing the Weaviate object.
-  factory WeaviateObject.fromJson(Map<String, dynamic> json) =>
+  factory WeaviateObject.fromJson(JsonObject json) =>
       _$WeaviateObjectFromJson(json);
 
   /// Converts the [WeaviateObject] instance to a JSON map.
   ///
   /// Returns a JSON map representing the Weaviate object.
-  Map<String, dynamic> toJson() =>
+  JsonObject toJson() =>
       _$WeaviateObjectToJson(this)..removeWhere((key, value) => value == null);
 
   @override
